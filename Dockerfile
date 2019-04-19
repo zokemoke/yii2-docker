@@ -1,7 +1,8 @@
-FROM 1and1internet/ubuntu-16-apache
+#FROM 1and1internet/ubuntu-16-apache
+FROM 1and1internet/ubuntu-16-apache-php-7.2
 MAINTAINER kawin@damasac.com
-ARG DEBIAN_FRONTEND=noninteractive
-ARG PHP_VERSION=7.2
+#ARG DEBIAN_FRONTEND=noninteractive
+#ARG PHP_VERSION=7.2
 
 RUN apt-get update \ 
   && cd /usr/lib/apt/methods \
