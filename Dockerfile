@@ -3,7 +3,8 @@ MAINTAINER kawin@damasac.com
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PHP_VERSION=7.2
 
-RUN cd /usr/lib/apt/methods \
+RUN apt-get update \ 
+  && cd /usr/lib/apt/methods \
   && ln -s http https
 RUN apt-get install apt-transport-https ca-certificates
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
