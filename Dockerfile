@@ -3,29 +3,15 @@ MAINTAINER kawin@damasac.com
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PHP_VERSION=7.2
 
-RUN apt-get update
-    # Required extension
-RUN docker-php-ext-install -j$(nproc) intl \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-png-dir=/usr/include --with-jpeg-dir=/usr/include \
-    && docker-php-ext-install -j$(nproc) gd
-RUN docker-php-ext-install pdo pdo_mysql \
-    && docker-php-ext-install -j$(nproc) opcache \
-    && pecl install apcu-5.1.8 imagick \
-    && docker-php-ext-enable apcu imagick
-    # Required by composer
-RUN docker-php-ext-install -j$(nproc) zip
+RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+&& curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+&& apt-get update \
+&& ACCEPT_EULA=Y apt-get install msodbcsql \
+&& ACCEPT_EULA=Y apt-get install mssql-tools \
+&& echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
+&& echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
+&& source ~/.bashrc \
+&& apt-get install unixodbc-dev
 
-    # Cleanup to keep the images size small
-RUN apt-get purge -y \
-        icu-devtools \
-        libicu-dev \
-        libpng-dev \
-        zlib1g-dev \
-        libfreetype6-dev \
-        libmagickwand-dev \
-        libjpeg-dev \
-        libjpeg62-turbo-dev \
-    && apt-get autoremove -y \
-    && rm -r /var/lib/apt/lists/*
 RUN a2enmod rewrite
 COPY config/php.ini /usr/local/etc/php/
