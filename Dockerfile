@@ -2,7 +2,7 @@ FROM 1and1internet/ubuntu-16-apache
 MAINTAINER kawin@damasac.com
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PHP_VERSION=7.2
-COPY files /
+
 RUN apt-get update \
     && apt-get -y install \
             libicu-dev \
