@@ -3,19 +3,7 @@ MAINTAINER kawin@damasac.com
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PHP_VERSION=7.2
 
-RUN apt-get update \
-    && apt-get -y install \
-            libicu-dev \
-            libjpeg-dev \
-            libjpeg62-turbo-dev \
-		    libpng-dev \
-            libfreetype6-dev \
-            imagemagick \
-            libmagickwand-dev \
-            # Required by composer
-            git \
-            zlib1g-dev \
-        --no-install-recommends
+RUN apt-get update
     # Required extension
 RUN docker-php-ext-install -j$(nproc) intl \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include --with-png-dir=/usr/include --with-jpeg-dir=/usr/include \
