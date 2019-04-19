@@ -10,12 +10,12 @@ RUN apt-get install -y --no-install-recommends apt-transport-https ca-certificat
 RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
   && curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
   && apt-get update \
-  && ACCEPT_EULA=Y apt-get install msodbcsql \
-  && ACCEPT_EULA=Y apt-get install mssql-tools \
+  && ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql \
+  && ACCEPT_EULA=Y apt-get install -y --no-install-recommends mssql-tools \
   && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
   && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
   && source ~/.bashrc
-RUN apt-get install unixodbc-dev
+RUN apt-get install -y --no-install-recommends unixodbc-dev
 
 RUN a2enmod rewrite
 COPY config/php.ini /usr/local/etc/php/
