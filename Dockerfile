@@ -1,8 +1,3 @@
-FROM alpine as ioncube_loader
-RUN apk add git \
-	&& git -c http.sslVerify=false clone https://git.dev.glo.gb/cloudhostingpublic/ioncube_loader \
-	&& tar zxf ioncube_loader/ioncube_loaders_lin_x86-64.tar.gz
-
 FROM 1and1internet/ubuntu-16-apache
 MAINTAINER kawin@damasac.com
 ARG DEBIAN_FRONTEND=noninteractive
