@@ -8,15 +8,25 @@ RUN apt-get update \
   && cd /usr/lib/apt/methods \
   && ln -s http https
 RUN apt-get install -y --no-install-recommends apt-transport-https ca-certificates
-#RUN curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
-#  && curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
-#  && apt-get update \
-#  && ACCEPT_EULA=Y apt-get install -y --no-install-recommends msodbcsql \
-#  && ACCEPT_EULA=Y apt-get install -y --no-install-recommends mssql-tools \
-#  && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bash_profile \
-#  && echo 'export PATH="$PATH:/opt/mssql-tools/bin"' >> ~/.bashrc \
-#  && source ~/.bashrc
-#RUN apt-get install -y --no-install-recommends unixodbc-dev
+
+RUN su \
+	&& curl https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+	&& curl https://packages.microsoft.com/config/ubuntu/16.04/prod.list > /etc/apt/sources.list.d/mssql-release.list \
+	&& exit
+RUN apt-get update \
+	&& ACCEPT_EULA=Y apt-get -y install msodbcsql17 \
+	&& apt-get -y install unixodbc-dev mssql-tools \
+	&& apt-get -y install php-pear php7.2-dev \
+	&& pecl install sqlsrv \
+	&& pecl install pdo_sqlsrv
+RUN su \
+	&& echo "extension=sqlsrv.so" > /etc/php/7.2/mods-available/sqlsrv.ini \
+	&& echo "extension=pdo_sqlsrv.so" > /etc/php/7.2/mods-available/pdo_sqlsrv.ini \
+	&& exit
+RUN ln -s /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/20-sqlsrv.ini \
+	&& ln -s /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini \
+	&& ln -s /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/apache2/conf.d/20-sqlsrv.ini \
+	&& ln -s /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/apache2/conf.d/20-pdo_sqlsrv.ini
 
 RUN a2enmod rewrite
 COPY config/php.ini /usr/local/etc/php/
