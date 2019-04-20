@@ -15,7 +15,7 @@ RUN su \
 	&& exit
 RUN apt-get update \
 	&& ACCEPT_EULA=Y apt-get -y install msodbcsql17 \
-	&& apt-get -y install unixodbc-dev mssql-tools \
+	&& ACCEPT_EULA=Y apt-get -y install unixodbc-dev mssql-tools \
 	&& apt-get -y install php-pear php7.2-dev \
 	&& pecl install sqlsrv \
 	&& pecl install pdo_sqlsrv
