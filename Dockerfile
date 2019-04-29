@@ -27,6 +27,7 @@ RUN ln -s /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/cli/conf.d/20-sqls
 	&& ln -s /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/cli/conf.d/20-pdo_sqlsrv.ini \
 	&& ln -s /etc/php/7.2/mods-available/sqlsrv.ini /etc/php/7.2/apache2/conf.d/20-sqlsrv.ini \
 	&& ln -s /etc/php/7.2/mods-available/pdo_sqlsrv.ini /etc/php/7.2/apache2/conf.d/20-pdo_sqlsrv.ini
-
+RUN dpkg -l cron \
+	&& apt-get install cron
 RUN a2enmod rewrite
 COPY config/php.ini /usr/local/etc/php/
