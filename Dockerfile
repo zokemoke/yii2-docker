@@ -31,3 +31,4 @@ RUN dpkg -l cron \
 	&& apt-get install cron
 RUN a2enmod rewrite
 COPY config/php.ini /usr/local/etc/php/
+CMD php yii queue/listen &
